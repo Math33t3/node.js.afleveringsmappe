@@ -69,6 +69,17 @@ const authorizeUser = async (socket, next) => {
         console.log(friendsList);
         socket.emit("friends", friendsList);
 
+        const redisMessages = await redisClient.lrange(`chat:${socket.user.userId}`, 0 ,-1);
+        //format er to.from.content fra directMessage event
+        messages = redisMessages.map(stringOfMessage => {
+            const prevMessage = stringOfMessage.split(".")
+            return { to: prevMessage[0], from: prevMessage[1], content: prevMessage[2]};
+        })
+        if (messages && messages.length > 0){
+            socket.emit("messages", messages);
+        };
+        
+
         //console.log("authorized user ",socket.user.userId);
         next();
     };
@@ -126,4 +137,20 @@ const compatibilityFriendsList = async friendsList => {
     return newFriendsList;
 }
 
-module.exports = { sessionMiddleware, compatibility, authorizeUser, addFriend, onDisconnect, corsServerConfig };
+const directMessage = async (socket, message) => {
+
+    message.from = socket.user.userId;
+
+    //to.from.content
+    const messageStore = [message.to, message.from, message.content].join(".");
+
+    await redisClient.lpush(`chat:${message.to}`, messageStore);
+    await redisClient.lpush(`chat:${message.from}`, messageStore);
+
+    socket.to(message.to).emit("directMessage", message);
+}
+
+
+
+
+module.exports = { sessionMiddleware, compatibility, authorizeUser, addFriend, directMessage, onDisconnect, corsServerConfig };

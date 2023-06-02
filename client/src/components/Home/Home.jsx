@@ -10,18 +10,18 @@ export const MessagesContext = createContext();
 const Home = () => {
     const [friendsList, setFriendsList] = useState([]);
     const [messages, setMessages] = useState([]);
-
+    const [friendIndex, setFriendIndex] = useState(0);
     useSocket(setFriendsList, setMessages);
-    console.log(friendsList);
+
     return (
         <FriendContext.Provider value={{ friendsList, setFriendsList }}>
-            <Grid templateColumns="repeat(10 , 1fr)" h="100vh" as={Tabs}>
-                <GridItem colSpan={"3"} borderRight="2px solid black">
+            <Grid templateColumns="repeat(10 , 1fr)" h="100vh" as={Tabs} onChange={(index) => setFriendIndex(index)}>
+                <GridItem colSpan={"3"} maxH="100vh" borderRight="2px solid black">
                     <Sidebar />
                 </GridItem>
-                <GridItem colSpan={"7"}>
-                    <MessagesContext.Provider value= {{messages, setMessages}}>
-                        <Chats />
+                <GridItem colSpan={"7"} maxH="100vh">
+                    <MessagesContext.Provider value={{ messages, setMessages }}>
+                            <Chats userId={friendsList[friendIndex]?.userId} />
                     </MessagesContext.Provider>
                 </GridItem>
             </Grid>

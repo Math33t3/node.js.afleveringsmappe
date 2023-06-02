@@ -7,7 +7,7 @@ const cors = require("cors");
 const authRouter = require("./routers/authRouter");
 const db = require("./database/connection");
 const bcrypt = require("bcrypt");
-const { sessionMiddleware, compatibility,authorizeUser, onDisconnect ,addFriend, corsServerConfig } = require("./controllers/serverController");
+const { sessionMiddleware, compatibility,authorizeUser, onDisconnect ,addFriend, directMessage, corsServerConfig } = require("./controllers/serverController");
 
 
 require("dotenv").config();
@@ -36,6 +36,7 @@ io.use(authorizeUser);
 io.on("connect", socket => {
     
     socket.on("addFriend", (friendName, callback) => {addFriend(socket, friendName, callback)});
+    socket.on("directMessage", (message) => {directMessage(socket, message)});
     socket.on("disconnect", () => onDisconnect(socket))
 })
 
