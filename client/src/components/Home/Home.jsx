@@ -1,5 +1,6 @@
 import { Grid, GridItem, Tabs } from "@chakra-ui/react";
 import { createContext, useState } from "react";
+import LogoutButton from "../Logout/Logout";
 import Sidebar from "./Sidebar";
 import Chats from "./Chats";
 import useSocket from "./SocketLogin";
@@ -18,6 +19,7 @@ const Home = () => {
             <Grid templateColumns="repeat(10 , 1fr)" h="100vh" as={Tabs} onChange={(index) => setFriendIndex(index)}>
                 <GridItem colSpan={"3"} maxH="100vh" borderRight="2px solid black">
                     <Sidebar />
+                    <LogoutButton />
                 </GridItem>
                 <GridItem colSpan={"7"} maxH="100vh">
                     <MessagesContext.Provider value={{ messages, setMessages }}>
