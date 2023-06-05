@@ -23,7 +23,7 @@ const sessionMiddleware = session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production" ? "none" : "auto",
         httpOnly: true,
         expires: 1000 * 60 * 60 * 24,
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -92,7 +92,7 @@ const addFriend = async (socket, friendName, callback) => {
     }
     
     const friend = await redisClient.hgetall(`userid:${friendName}`);
-    console.log(friend+ " den her");
+    console.log(friend);
     const existingFriends = await redisClient.lrange(`friends:${socket.user.username}`, 0, -1)
 
     if (!friend.userId) {

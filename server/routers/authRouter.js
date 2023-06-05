@@ -68,7 +68,10 @@ router.post("/register", formValidationMiddleware, rateLimiter, async (req, res)
     };
 });
 
-
+router.get("/logout", (req, res) => {
+    res.clearCookie("sid");
+    res.send("Cookie cleared");
+});
 
 
 
