@@ -5,10 +5,7 @@ const app = express();
 const helmet = require("helmet");
 const cors = require("cors");
 const authRouter = require("./routers/authRouter");
-const db = require("./database/connection");
-const bcrypt = require("bcrypt");
 const { sessionMiddleware, compatibility,authorizeUser, onDisconnect ,addFriend, directMessage, corsServerConfig } = require("./controllers/serverController");
-
 
 require("dotenv").config();
 
@@ -26,10 +23,10 @@ app.use(sessionMiddleware);
 
 app.use("/auth", authRouter);
 
-app.get("/", (req, res) => {
+/*app.get("/", (req, res) => {
     res.send(data = { message: "hi" })
 });
-//const compatibilityMiddleware = compatibility(sessionMiddleware);
+//const compatibilityMiddleware = compatibility(sessionMiddleware);*/
 
 io.use(compatibility(sessionMiddleware));
 io.use(authorizeUser);
