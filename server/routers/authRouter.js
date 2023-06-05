@@ -69,8 +69,14 @@ router.post("/register", formValidationMiddleware, rateLimiter, async (req, res)
 });
 
 router.get("/logout", (req, res) => {
+    //skal slette cookies
     res.clearCookie("sid");
-    res.send("Cookie cleared");
+    //skal sende til Redis at user er disconnected
+
+    //skal sende til alle friends at user er disconnected
+
+
+    res.send("Cookie cleared and user logged out");
 });
 
 
